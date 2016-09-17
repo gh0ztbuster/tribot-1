@@ -29,71 +29,8 @@ import java.util.HashMap;
  */
 
 @ScriptManifest(authors = { "Deluxes" }, category = "Tools", name = "DeluxeTutorial", version = 1.00, description = "Completes tutorial island. Account creation agruments can be found in the script thread.", gameMode = 1)
-public class Tutorial extends Script implements BaseScript, Arguments, Painting {
+public class Tutorial {
     static ArrayList<Node> nodes = new ArrayList<>();
-    private ACamera camera = new ACamera();
-    private Bag bag = new Bag();
-
-    @Override
-    public void run() {
-        General.println("Starting tutorial script.");
-        this.setLoginBotState(false);
-        if (Integer.parseInt(AccountCreator.getBag().get("accountsToMake", "0")) == 0) {
-            this.setLoginBotState(true);
-            if (start(this)) {
-                System.out.println("DeluxeTutorial took " + Timing.msToString(System.currentTimeMillis() - bag.get("tutorialStartTime", System.currentTimeMillis())) + " to complete.");
-            } else {
-                System.out.println("DeluxeTutorial ran for " + Timing.msToString(System.currentTimeMillis() - bag.get("tutorialStartTime", System.currentTimeMillis())) + " but was unable to complete.");
-            }
-            Login.logout();
-        } else {
-            while (Integer.parseInt(AccountCreator.getBag().get("accountsToMake", "0")) > 0) {
-                this.setLoginBotState(false);
-                AccountCreator.CreationResult result = AccountCreator.createAccount();
-                switch (result) {
-                    case SUCCESS:
-                    case EMAIL_IN_USE:
-                        setStatus("ACCOUNT CREATOR: Creating account.");
-                        if (Boolean.valueOf(AccountCreator.getBag().get("completeTutorial", "false"))) {
-                            setStatus("ACCOUNT CREATOR: Account creation successful.");
-                            bag.addOrUpdate("email", AccountCreator.getBag().get("email"));
-                            bag.addOrUpdate("password", AccountCreator.getBag().get("password"));
-
-                            if (start(this)) {
-                                System.out.println("DeluxeTutorial took " + Timing.msToString(System.currentTimeMillis() - bag.get("tutorialStartTime", System.currentTimeMillis())) + " to complete.");
-                                if (Boolean.valueOf(AccountCreator.getBag().get("7qp", "false"))) {
-                                    if (Quester.start(this)) {
-                                        System.out.println("DeluxeQuester took " + Timing.msToString(System.currentTimeMillis() - bag.get("questStartTime", System.currentTimeMillis())) + " to complete.");
-                                    } else {
-                                        System.out.println("DeluxeQuester ran for " + Timing.msToString(System.currentTimeMillis() - bag.get("questStartTime", System.currentTimeMillis())) + " but was unable to complete.");
-                                    }
-                                }
-                            } else {
-                                System.out.println("DeluxeTutorial ran for " + Timing.msToString(System.currentTimeMillis() - bag.get("tutorialStartTime", System.currentTimeMillis())) + " but was unable to complete.");
-                            }
-                            Login.logout();
-                        }
-                        break;
-                    case BAN:
-                        setStatus("ACCOUNT CREATOR: Waiting 15 minute creation ban.");
-                        General.sleep(15*60*1000, 20*60*1000); //Waitout 15minute creation ban
-                        break;
-                    case TIMEOUT:
-                        setStatus("ACCOUNT CREATOR: Proxy request timed out.");
-                        General.sleep(30*1000, 60*1000); //Wait as the proxy is being stupid
-                        break;
-                }
-            }
-        }
-    }
-
-    @Override
-    public void onPaint(Graphics g) {
-        g.setColor(new Color(255, 255, 255));
-        g.drawString("Runtime: " + Timing.msToString(this.getRunningTime()), 50, 50);
-        g.drawString("Number of accounts to create: " + AccountCreator.getBag().get("accountsToMake", "0"), 50, 80);
-        g.drawString("Current task: " + bag.get("status", ""), 50, 110);
-    }
 
     public static boolean start(BaseScript script) {
         script.getBag().addOrUpdate("tutorialStartTime", System.currentTimeMillis());
@@ -142,36 +79,5 @@ public class Tutorial extends Script implements BaseScript, Arguments, Painting 
                 General.sleep(General.random(100, 250));
             }
         }
-    }
-
-    @Override
-    public ACamera getCamera() {
-        return this.camera;
-    }
-
-    @Override
-    public Bag getBag() {
-        return this.bag;
-    }
-
-    @Override
-    public Script getScript() {
-        return this;
-    }
-
-    @Override
-    public void setStatus(String status) {
-        bag.addOrUpdate("status", status);
-        General.println(status);
-    }
-
-    @Override
-    public void update(String message) {
-
-    }
-
-    @Override
-    public void passArguments(HashMap<String, String> hashMap) {
-        AccountCreator.setup(hashMap);
     }
 }
