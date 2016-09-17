@@ -145,7 +145,7 @@ public class AccountCreator {
 
         String displayName = randomizeString(bag.get("displayNameBase"));
         String password = randomizeString(bag.get("password"));
-        String email = bag.get("baseEmail", "").replace("#", bag.get("accountIndex"));
+        String email = bag.get("emailBase", "").replace("#", bag.get("accountIndex"));
 
         println("-- Generating account with details --");
         println("Display Name: " + displayName);
@@ -175,7 +175,7 @@ public class AccountCreator {
                 params.put("trialactive", true);
                 params.put("onlyOneEmail", 1);
                 params.put("displayname_present", true);
-                params.put("age", bag.get("age"));
+                params.put("age", Integer.parseInt(bag.get("age")));
                 params.put("displayname", displayName);
                 params.put("email1", email);
                 params.put("password1", password);

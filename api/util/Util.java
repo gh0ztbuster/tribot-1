@@ -12,7 +12,6 @@ import org.tribot.api2007.types.RSTile;
 import scripts.api.misc.BooleanLambda;
 import scripts.api.misc.Condition;
 import scripts.api.patterns.BaseScript;
-import scripts.deluxehub.Main;
 
 import java.util.Arrays;
 
