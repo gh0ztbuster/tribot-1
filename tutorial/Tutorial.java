@@ -36,7 +36,7 @@ public class Tutorial extends Script implements BaseScript, Arguments, Painting 
 
     @Override
     public void run() {
-        if (Integer.parseInt(AccountCreator.getBag().get("accountsToMake")) == 0) {
+        if (Integer.parseInt(AccountCreator.getBag().get("accountsToMake", "0")) == 0) {
             if (start(this)) {
                 System.out.println("DeluxeTutorial took " + Timing.msToString(System.currentTimeMillis() - bag.get("tutorialStartTime", System.currentTimeMillis())) + " to complete.");
             } else {
@@ -44,14 +44,14 @@ public class Tutorial extends Script implements BaseScript, Arguments, Painting 
             }
             Login.logout();
         } else {
-            while (Integer.parseInt(AccountCreator.getBag().get("accountsToMake")) > 0) {
+            while (Integer.parseInt(AccountCreator.getBag().get("accountsToMake", "0")) > 0) {
                 this.setLoginBotState(false);
                 AccountCreator.CreationResult result = AccountCreator.createAccount();
                 switch (result) {
                     case SUCCESS:
                     case EMAIL_IN_USE:
                         setStatus("ACCOUNT CREATOR: Creating account.");
-                        if (Boolean.valueOf(AccountCreator.getBag().get("completeTutorial"))) {
+                        if (Boolean.valueOf(AccountCreator.getBag().get("completeTutorial", "false"))) {
                             setStatus("ACCOUNT CREATOR: Account creation successful.");
                             bag.addOrUpdate("email", AccountCreator.getBag().get("email"));
                             bag.addOrUpdate("password", AccountCreator.getBag().get("password"));
