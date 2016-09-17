@@ -36,7 +36,10 @@ public class Tutorial extends Script implements BaseScript, Arguments, Painting 
 
     @Override
     public void run() {
+        General.println("Starting tutorial script.");
+        this.setLoginBotState(false);
         if (Integer.parseInt(AccountCreator.getBag().get("accountsToMake", "0")) == 0) {
+            this.setLoginBotState(true);
             if (start(this)) {
                 System.out.println("DeluxeTutorial took " + Timing.msToString(System.currentTimeMillis() - bag.get("tutorialStartTime", System.currentTimeMillis())) + " to complete.");
             } else {

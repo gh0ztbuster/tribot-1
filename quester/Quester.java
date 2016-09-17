@@ -3,6 +3,7 @@ package scripts.quester;
 import org.tribot.api.General;
 import org.tribot.api.Timing;
 import org.tribot.script.Script;
+import org.tribot.script.ScriptManifest;
 import org.tribot.script.interfaces.Arguments;
 import scripts.api.data.Bag;
 import scripts.api.patterns.BaseScript;
@@ -19,19 +20,10 @@ import java.util.HashMap;
 /**
  * Created by Spencer on 9/4/2016.
  */
-public class Quester extends Script implements BaseScript, Arguments {
-    static ArrayList<Node> nodes = new ArrayList<>();
-    private ACamera camera = new ACamera();
-    private Bag bag = new Bag();
 
-    @Override
-    public void run() {
-        if (Quester.start(this)) {
-            System.out.println("DeluxeQuester took " + Timing.msToString(System.currentTimeMillis() - bag.get("questStartTime", System.currentTimeMillis())) + " to complete.");
-        } else {
-            System.out.println("DeluxeQuester ran for " + Timing.msToString(System.currentTimeMillis() - bag.get("questStartTime", System.currentTimeMillis())) + " but was unable to complete.");
-        }
-    }
+@ScriptManifest(authors = { "Deluxes" }, category = "Tools", name = "DeluxeQuester", version = 1.00, description = "Completes 7QP for bots.", gameMode = 1)
+public class Quester {
+    static ArrayList<Node> nodes = new ArrayList<>();
 
     public static boolean start(BaseScript script) {
         script.getBag().addOrUpdate("questStartTime", System.currentTimeMillis());
@@ -57,35 +49,5 @@ public class Quester extends Script implements BaseScript, Arguments {
             General.sleep(100, 250);
         }
         return true;
-    }
-
-    @Override
-    public ACamera getCamera() {
-        return this.camera;
-    }
-
-    @Override
-    public Bag getBag() {
-        return this.bag;
-    }
-
-    @Override
-    public Script getScript() {
-        return this;
-    }
-
-    @Override
-    public void setStatus(String status) {
-        General.println(status);
-    }
-
-    @Override
-    public void update(String message) {
-
-    }
-
-    @Override
-    public void passArguments(HashMap<String, String> hashMap) {
-
     }
 }
